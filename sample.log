@@ -1,0 +1,5 @@
+2025-01-14 10:33:21,123 - INFO - User login successful
+2025-01-14 10:34:10,567 - WARNING - Disk almost full
+2025-01-14 10:35:01,210 - ERROR - Failed to open file
+2025-01-14 10:35:02,211 - ERROR - Failed to open file
+2025-01-14 10:36:00,111 - DEBUG - Debugging mode on
