@@ -1,0 +1,130 @@
+1.LOGFILE ANALYZER:
+------------------------
+
+---->OBJECTIVE: Create a python command line application that reads a logfile and generates a detail summary report. this focuses on file handling ,text parsing, dictionaries, and 
+
+reporting.
+
+DESCRIPTION:
+==============
+You are required to build a tool that analyses a log file(application logs server logs)the tool should read the file line by line extract information, count occurrencesand print a clean 
+
+statistical summary.
+
+REQUIREMENTS:
+================
+1.Ask user to input logfile path
+
+2.validate file exists; if not show error.
+
+3.Read line by line and parse.
+
+---->Time stamp
+
+---->Log level(INFO,WARNING,ERROR,DEBUG,CRITICAL)
+
+---->Message text
+
+4.Produce summary:
+
+--->Total log entries
+
+--->count of each log level
+
+--->Top 3 most common error messages.
+
+5.Display the summary cleanly in the console.
+
+
+CONSTRAINTS:
+=============
+1.Use only built-in python modules
+
+2.No GUI OR plotting
+
+OPTIONAL EXTENSIONS:
+======================
+
+--->filter logs by date range
+
+--->Export result to a JSON file
+
+--->Allow user to choose top N messages.
+
+
+
+
+
+
+###.PYTHON PROGRAM:
+-------------------------
+
+
+import os
+
+class LogFileAnalyzer:
+
+    def init(self, file_path):
+        self.file_path = file_path
+        self.total_logs = 0
+
+        self.log_levels = {
+            "INFO": 0,
+            "WARNING": 0,
+            "ERROR": 0,
+            "DEBUG": 0,
+            "CRITICAL": 0
+        }
+
+        self.error_messages = {}
+
+    def validate_file(self):
+        return os.path.exists(self.file_path)
+
+    def analyze(self):
+        if not self.validate_file():
+            print("Error: File does not exist")
+            return
+        with open(self.file_path, "r") as file:
+            for line in file:
+                line = line.strip()
+                if not line:
+                    continue
+
+                self.total_logs += 1
+
+                parts = line.split(" - ")
+
+                if len(parts) >= 3:
+                    level = parts[1]
+                    message = parts[2]
+                    if level in self.log_levels:
+                        self.log_levels[level] += 1
+                    if level == "ERROR":
+                        if message in self.error_messages:
+                            self.error_messages[message] += 1
+                        else:
+                            self.error_messages[message] = 1
+
+    def print_summary(self):
+        print("\n===== LOG SUMMARY =====")
+        print("Total log entries:", self.total_logs)
+
+        print("\nLog level counts:")
+        for level, count in self.log_levels.items():
+            print(f"{level}: {count}")
+
+        print("\nTop 3 Error Messages:")
+        sorted_errors = sorted(
+            self.error_messages.items(),
+            key=lambda x: x[1],
+            reverse=True
+        )
+
+        for msg, count in sorted_errors[:3]:
+            print(f"{msg} - {count} times")
+
+log_file_path = input("Enter log file path: ")
+analyzer = LogFileAnalyzer(log_file_path)
+analyzer.analyze()
+analyzer.print_summary()
